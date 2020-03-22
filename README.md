@@ -22,7 +22,7 @@ APP_URL=http://localhost
 ## Migration
 
 Criar `migration` de Categoria (se colocar parametro -mc já cria o Model e Controller).
-``bash
+```bash
 php artisan make:model Models\\Categoria -m
-``
+```
 
