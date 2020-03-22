@@ -1,4 +1,4 @@
-## Passo 1
+## Configurações
 
 Instalar Laravel
 ```bash
@@ -18,6 +18,8 @@ APP_NAME=Laravel
 
 APP_URL=http://localhost
 ```
+
+## Migration
 
 Criar `migration` de Categoria (se colocar parametro -mc já cria o Model e Controller).
 ``bash
