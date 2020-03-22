@@ -150,6 +150,8 @@ class Categoria extends Model
 {
     public function getResults($name)
     {
+        protected $fillable = ['name'];
+
         return $this->where('name', 'LIKE', "%{$name}%")->get();
     }
 }
@@ -178,6 +180,8 @@ class Categoria extends Model
     public function getResults($name = null)
     {
         // Parametro `$name = null` indica que não e um valor obrigatório informar.
+        
+        protected $fillable = ['name'];
 
         // Se valor for igual a null, retorna tudo.
         if (!$name)
@@ -189,6 +193,52 @@ class Categoria extends Model
 }
 
 ```
+
+## CADASTRAR Categoria
+
+Para não ficar repetindo injeção da model `Categoria $categoria` nos metodos, crie um construtor. Cria o metodo `Store()` para fazer o insert da nova categoria.
+
+```php
+class CategoriaController extends Controller
+{
+    // propriedade que recebe o objeto de categoria 
+    private $categoria;
+
+    public function __construct(Categoria $categoria)
+    {
+        $this->categoria = $categoria;
+    }
+
+    // cria index
+    public function index(Request $request)
+    {
+        $categorias = $this->categoria->getResults($request->name);
+
+        return response()->json($categorias);
+    }
+
+    // metodo Store, padrão para salvar informação.
+    public function store(Request $request)
+    {
+        $categoria = $this->categoria->create($request->all());
+
+        return response()->json($categoria, 201);
+    }
+}
+```
+
+Inserir rota para `store` de categoria com o verbo `POST`
+
+```php
+// routes\api.php
+
+Route::get('categorias', 'Api\CategoriaController@index');
+Route::post('categorias', 'Api\CategoriaController@store');
+```
+
+Insert através do Postman, altere o tipo da requisição para `POST` e passa parametros usando a url `http://127.0.0.1:8000/api/categorias`
+
+
 
 
 
