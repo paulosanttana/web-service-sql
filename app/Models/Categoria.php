@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categoria extends Model
 {
-    //
+    public function getResults($name)
+    {
+        return $this->where('name', 'LIKE', "%{$name}%")->get();
+    }
 }
