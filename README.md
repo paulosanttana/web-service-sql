@@ -12,12 +12,12 @@ Configurar Time-Zone
 'timezone' => 'America/Sao_Paulo',
 ```
 
-Configurar nome da plicação e URL da aplicação `.env`
-`php
+Configurar nome da plicação e URL da aplicação `.env`.
+```php
 APP_NAME=Laravel
 
 APP_URL=http://localhost
-`
+```
 
 Criar `migration` de Categoria (se colocar parametro -mc já cria o Model e Controller).
 ``bash
