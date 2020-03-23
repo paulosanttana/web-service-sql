@@ -32,4 +32,15 @@ class CategoriaController extends Controller
 
         return response()->json($categoria, 201);
     }
+
+    public function update(Request $request, $id)
+    {
+        $categoria = $this->categoria->find($id);
+        if(!$categoria)
+            return response()->json(['error' => 'Registro Nao encontrado!'], 404);
+
+        $categoria->update($request->all());
+
+        return response()->json($categoria, 200);
+    }
 }

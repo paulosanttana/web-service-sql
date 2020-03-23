@@ -113,7 +113,7 @@ Route::get('categorias', 'Api\CategoriaController@index');
 ```
 
 
-## Faça INSERT categoria teste
+## Faça INSERT categoria teste diretamente pelo SQL Server
 ```sql
 -- INSERT CATEGORIA teste
 INSERT INTO LARAVEL_API_SQL..categorias (name) VALUES ('teste')
@@ -132,7 +132,7 @@ Faça o teste no Postman (http://127.0.0.1:8000/api/categorias)
 ]
 ```
 
-## Listar por filtro (alterar select para filtrar por nome usando like)
+## LISTAR por filtro (alterar select para filtrar por nome usando like)
 ```php
 // CategoriaController
 
@@ -148,10 +148,10 @@ Cria um método `getResults` para fazer o filtro através do parametro `$name`.
 // App\Models\Categoria
 class Categoria extends Model
 {
+    protected $fillable = ['name'];
+
     public function getResults($name)
     {
-        protected $fillable = ['name'];
-
         return $this->where('name', 'LIKE', "%{$name}%")->get();
     }
 }
@@ -177,11 +177,11 @@ Caso não passe parametro faça uma condição.
 // App\Models\Categoria
 class Categoria extends Model
 {
+    protected $fillable = ['name'];
+
     public function getResults($name = null)
     {
         // Parametro `$name = null` indica que não e um valor obrigatório informar.
-        
-        protected $fillable = ['name'];
 
         // Se valor for igual a null, retorna tudo.
         if (!$name)
@@ -238,6 +238,26 @@ Route::post('categorias', 'Api\CategoriaController@store');
 
 Insert através do Postman, altere o tipo da requisição para `POST` e passa parametros usando a url `http://127.0.0.1:8000/api/categorias`
 
+
+## EDITAR Categoria
+
+Criar método `update()`
+```php
+    public function update(Request $request, $id)
+    {
+        $categoria = $this->categoria->find($id);
+        if(!$categoria)
+            return response()->json(['error' => 'Registro Nao encontrado!'], 404);
+
+        $categoria->update($request->all());
+
+        return response()->json($categoria, 200);
+    }
+```
+Define rota para update
+```php
+Route::put('categorias/{id}', 'Api\CategoriaController@update');
+```
 
 
 
