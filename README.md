@@ -312,10 +312,10 @@ Faça o teste pelo Postman, passe os parametros na aba `Headers`, requisição d
 
 ## DELETAR   Categoria
 
-Adicione metodo `delete`
+Adicione metodo `destroy`
 
 ```php
-public function delete($id)
+public function destroy($id)
 {
     $categoria = $this->categoria->find($id);
     if(!$categoria)
@@ -333,6 +333,36 @@ Route::delete('categorias/{id}', 'Api\CategoriaController@delete');
 ```
 
 
+## Simplificar ROTAS
+
+Trocar todas rotas por `apiResource()`
+```php
+/**
+* Route::get('categorias', 'Api\CategoriaController@index');
+* Route::post('categorias', 'Api\CategoriaController@store');
+* Route::put('categorias/{id}', 'Api\CategoriaController@update');
+* Route::delete('categorias/{id}', 'Api\CategoriaController@delete');
+*/
+
+Route::apiResource('categorias', 'Api\CategoriaController');
+```
+
+## Método SHOW
+
+Criar método show para pesquisar pelo id passado pela url.
+```php
+public function show($id)
+{
+    $categoria = $this->categoria->find($id);
+    if(!$categoria)
+        return response()->json(['error' => 'Registro Nao encontrado!'], 404);
+    
+    return response()->json($categoria);
+}
+```
+
+
+
 Rotas utilizada
 > http://127.0.0.1:8000/api/categorias      // SELECT
 
@@ -343,3 +373,5 @@ Rotas utilizada
 > http://127.0.0.1:8000/api/carros?name=Sil     // SELECT COM PARAMETRO
 
 > http://127.0.0.1:8000/api/categorias/8        // DELETE
+
+> http://127.0.0.1:8000/api/categorias/1        // SHOW, mostra somente categoria desejada

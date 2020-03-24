@@ -26,6 +26,15 @@ class CategoriaController extends Controller
         return response()->json($categorias);
     }
 
+    public function show($id)
+    {
+        $categoria = $this->categoria->find($id);
+        if(!$categoria)
+            return response()->json(['error' => 'Registro Nao encontrado!'], 404);
+        
+        return response()->json($categoria);
+    }
+
     // metodo Store, padrão para salvar informação.
     public function store(ValidaCategoriaFormRequest $request)
     {
@@ -45,7 +54,7 @@ class CategoriaController extends Controller
         return response()->json($categoria, 200);
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         $categoria = $this->categoria->find($id);
         if(!$categoria)
