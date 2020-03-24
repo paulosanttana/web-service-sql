@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Categoria; // Adiciona model
+use App\Http\Requests\ValidaCategoriaFormRequest; // Validação de UPDATE/CREATE
 
 class CategoriaController extends Controller
 {
@@ -26,7 +27,7 @@ class CategoriaController extends Controller
     }
 
     // metodo Store, padrão para salvar informação.
-    public function store(Request $request)
+    public function store(ValidaCategoriaFormRequest $request)
     {
         $categoria = $this->categoria->create($request->all());
 
@@ -43,4 +44,16 @@ class CategoriaController extends Controller
 
         return response()->json($categoria, 200);
     }
+
+    public function delete($id)
+    {
+        $categoria = $this->categoria->find($id);
+        if(!$categoria)
+            return response()->json(['error' => 'Registro Nao encontrado!'], 404);
+
+        $categoria->delete();
+
+        return response()->json(['success' => true], 204);
+    }
+
 }

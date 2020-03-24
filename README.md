@@ -73,6 +73,8 @@ DB_PASSWORD=sql@2020
         ],
 ```
 
+Executar `php artisan migrate` para criar a tabela
+
 
 ## Controller Simples
 
@@ -80,6 +82,7 @@ Criar controller de API (se adicionar parametro --resource cria todos os metodos
 ```bash
 php artisan make:controller Api\\CategoriaController
 ```
+
 
 ## Listando categorias
 ```php
@@ -260,8 +263,79 @@ Route::put('categorias/{id}', 'Api\CategoriaController@update');
 ```
 
 
+## Validação Cadastro API com Form Request
+
+Execute para criar arquivo FormRequest de validação
+```bash
+php artisan make:request ValidaCategoriaFormRequest
+```
+
+```php
+// App\Http\Requests\ValidaCategoriaFormRequest
+
+public function authorize()
+{
+    return true; //passe de false para true.
+}
+...
+public function rules()
+{
+    return [
+        'name' => 'required|min:3|max:50|unique:categorias', // Regras de validação
+    ];
+}
+```
+
+Adiciona use para o arquivo e substitua o parametro `Request` no metodo Store() para `use App\Http\Requests\ValidaCategoriaFormRequest; // Validação de UPDATE/CREATE`
+```php
+use App\Http\Requests\use App\Http\Requests\ValidaCategoriaFormRequest; // Validação de UPDATE/CREATE; // Validação de UPDATE/CREATE
+...
+
+// metodo Store, padrão para salvar informação.
+public function store(ValidaCategoriaFormRequest $request)
+{
+    $categoria = $this->categoria->create($request->all());
+
+    return response()->json($categoria, 201);
+}
+```
+
+Faça o teste pelo Postman, passe os parametros na aba `Headers`, requisição do tipo `AJAX`
+
+> Key: content-Type           Value: application/json
+> Key: X-Requested-With       Value: XMLHttpRequest
+
+é na aba Params passe o campo com seu novo valor
+
+> Key: name         Value: Novo_Nome
 
 
+## DELETAR   Categoria
+
+Adicione metodo `delete`
+
+```php
+public function delete($id)
+{
+    $categoria = $this->categoria->find($id);
+    if(!$categoria)
+        return response()->json(['error' => 'Registro Nao encontrado!'], 404);
+
+    $categoria->delete();
+
+    return response()->json(['success' => true], 204);
+}
+```
+
+Cria Rota do tipo `delete`
+```php
+Route::delete('categorias/{id}', 'Api\CategoriaController@delete');
+```
 
 
-
+Rotas utilizada
+> http://127.0.0.1:8000/api/categorias  // SELECT
+> http://127.0.0.1:8000/api/categorias?name=tes 2   // INSERT
+> http://127.0.0.1:8000/api/categorias/3?name=UPDATEE   // UPDATE
+> http://127.0.0.1:8000/api/carros?name=Sil // SELECT COM PARAMETRO
+> http://127.0.0.1:8000/api/categorias/8    // DELETE
