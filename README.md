@@ -335,7 +335,11 @@ Route::delete('categorias/{id}', 'Api\CategoriaController@delete');
 
 Rotas utilizada
 > http://127.0.0.1:8000/api/categorias  // SELECT
+
 > http://127.0.0.1:8000/api/categorias?name=tes 2   // INSERT
+
 > http://127.0.0.1:8000/api/categorias/3?name=UPDATEE   // UPDATE
+
 > http://127.0.0.1:8000/api/carros?name=Sil // SELECT COM PARAMETRO
+
 > http://127.0.0.1:8000/api/categorias/8    // DELETE
